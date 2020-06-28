@@ -1,23 +1,16 @@
 import React from "react"
+import HomeTab from "./tabs/HomeTab"
+import "../assets/styles/App.scss"
 
-function App(): JSX.Element {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const App: React.FC = () => (
+  <div className="app">
+    <header className="app__header column is-12">
+      <h1>Hacker News</h1>
+    </header>
+    <div className="app__posts">
+      <HomeTab />
     </div>
-  )
-}
+  </div>
+)
 
 export default App
