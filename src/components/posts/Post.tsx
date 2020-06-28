@@ -9,7 +9,12 @@ type Props = {
 
 const Post: React.FC<Props> = ({ data }) => (
   <div className="column is-6 post">
-    <a href={data.link} className="post__inner">
+    <a
+      href={data.link}
+      className="post__inner"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <p className="post__date">
         <img src={time} alt="post-date" />
         <span>
