@@ -1,6 +1,5 @@
 import React from "react"
-import PostsGrid from "./posts/PostsGrid"
-import logo from "../assets/images/hacker-news.svg"
+import HomeTab from "./tabs/HomeTab"
 import "../assets/styles/App.scss"
 
 const App: React.FC = () => (
@@ -9,7 +8,7 @@ const App: React.FC = () => (
       <h1>Hacker News</h1>
     </header>
     <div className="app__posts">
-      <PostsGrid />
+      <HomeTab />
     </div>
   </div>
 )

@@ -3,6 +3,12 @@ import _ from "lodash"
 import moment from "moment"
 import { Obj, PostObject } from "@types"
 
+/** Localstorage utils **/
+type StorageSaveAction = "save_filter" | "save_faves"
+type StorageGetAction = "get_filter" | "get_faves"
+const FILTER_REF = "hacker-news-filter"
+const FAVES_REF = "hacker-news-faves"
+
 /**
  * Filter api results to remove unnecesary data
  * @param hits
@@ -58,4 +64,25 @@ const http = (category: string, page = 0): Promise<PostObject[]> =>
     }
   })
 
-export { http }
+/**
+ * Save item in LocalStorage
+ * @param action
+ * @param value
+ */
+const setStorageItem = (action: StorageSaveAction, value: string): void => {
+  const key = action === "save_filter" ? FILTER_REF : FAVES_REF
+  window.localStorage.setItem(key, value)
+}
+
+/**
+ * Get item from LocalStorage
+ * @param action
+ */
+const getStorageItem = (action: StorageGetAction): string | undefined => {
+  const key = action === "get_filter" ? FILTER_REF : FAVES_REF
+  const item = window.localStorage.getItem(key)
+
+  if (item) return item
+}
+
+export { http, setStorageItem, getStorageItem }
