@@ -45,11 +45,13 @@ const Filter: React.FC<Props> = ({ category, callback }) => {
       setCurrent(category)
       setActive(false)
 
-      // Save in LocalStorage
-      setStorageItem("save_filter", category)
+      if (category !== current) {
+        // Save in LocalStorage
+        setStorageItem("save_filter", category)
 
-      // Return callback
-      callback(category)
+        // Return callback
+        callback(category)
+      }
     }
   }
 
