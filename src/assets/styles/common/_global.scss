@@ -1,0 +1,19 @@
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-main;
+  min-height: 100vh;
+  margin: 0;
+  color: $grey;
+}
+
+.columns {
+  margin: 0 !important;
+}
+
+button {
+  background: none;
+  border: none;
+}
