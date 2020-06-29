@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { PostObject } from "@types"
 import Post from "../posts/Post"
 import Filter from "../posts/Filter"
+import Notice from "../Notice"
 import { http, getStorageItem } from "../../utils"
 
 const HomeTab: React.FC = () => {
@@ -13,6 +14,7 @@ const HomeTab: React.FC = () => {
    */
   const [posts, setPosts] = useState<PostObject[]>([])
   const [isLoading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const [category, setCategory] = useState<string>(filter ?? "reactjs")
 
   /**
@@ -26,9 +28,10 @@ const HomeTab: React.FC = () => {
 
         // Update state
         setPosts(posts)
+      } catch {
+        setError(true)
+      } finally {
         setLoading(false)
-      } catch (error) {
-        console.log(error)
       }
     }
 
@@ -52,6 +55,12 @@ const HomeTab: React.FC = () => {
       <Filter callback={filterCallback} category={category} />
       {isLoading ? (
         <span className="loader" />
+      ) : error ? (
+        <Notice
+          heading="Oops!"
+          subheading="There's been an error, please try again"
+          text="Error 500"
+        />
       ) : (
         <>
           {posts.map((post, i) => (
