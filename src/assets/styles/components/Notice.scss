@@ -1,0 +1,27 @@
+@import "../common/common";
+
+.notice {
+  @include flexCenter;
+  min-height: 75vh;
+
+  &__inner {
+    text-align: center;
+
+    p {
+      font-size: 20 * $px;
+      color: $dark-grey;
+    }
+
+    h2 {
+      font-size: 60 * $px;
+      font-weight: bold;
+      color: $blue;
+    }
+
+    h3 {
+      margin-top: 25 * $px;
+      color: $dark-grey;
+      font-weight: bold;
+    }
+  }
+}

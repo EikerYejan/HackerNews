@@ -71,6 +71,16 @@
     }
   }
 
+  &.is-fav {
+    .post__like-button {
+      svg {
+        path {
+          fill: $red;
+        }
+      }
+    }
+  }
+
   @include mobile {
     &__inner {
       width: 75%;

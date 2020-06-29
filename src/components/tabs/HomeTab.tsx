@@ -55,7 +55,7 @@ const HomeTab: React.FC = () => {
       ) : (
         <>
           {posts.map((post, i) => (
-            <Post key={i} data={post} />
+            <Post key={i} data={post} isFav={post.isLiked} />
           ))}
         </>
       )}
