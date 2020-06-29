@@ -17,7 +17,7 @@ const FavesTab: React.FC = () => {
 
     // Update state
     setPosts(faves)
-    setTimeout(() => setLoading(false), 1500)
+    setTimeout(() => setLoading(false), 500)
   }, [])
 
   /**

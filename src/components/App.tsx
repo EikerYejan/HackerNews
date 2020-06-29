@@ -1,6 +1,5 @@
 import React from "react"
-// import FavesTab from "./tabs/FavesTab"
-import HomeTab from "./tabs/HomeTab"
+import TabsSwitch from "./tabs/TabsSwitch"
 import "../assets/styles/App.scss"
 
 const App: React.FC = () => (
@@ -9,7 +8,7 @@ const App: React.FC = () => (
       <h1>Hacker News</h1>
     </header>
     <div className="app__posts">
-      <HomeTab />
+      <TabsSwitch />
     </div>
   </div>
 )
