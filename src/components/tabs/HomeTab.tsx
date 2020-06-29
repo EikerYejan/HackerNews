@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { PostObject } from "@types"
 import Post from "../posts/Post"
 import Filter from "../posts/Filter"
+import Pagination from "../posts/Pagination"
 import Notice from "../Notice"
 import { http, getStorageItem } from "../../utils"
 
@@ -16,6 +17,7 @@ const HomeTab: React.FC = () => {
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [category, setCategory] = useState<string>(filter ?? "reactjs")
+  const [currentPage, setCurrentPage] = useState(0)
 
   /**
    * Get API data
@@ -24,7 +26,7 @@ const HomeTab: React.FC = () => {
     const getPosts = async () => {
       try {
         // Request
-        const posts = await http(category)
+        const posts = await http(category, currentPage)
 
         // Update state
         setPosts(posts)
@@ -36,10 +38,10 @@ const HomeTab: React.FC = () => {
     }
 
     getPosts()
-  }, [category])
+  }, [category, currentPage])
 
   /**
-   * Callback when new category is selected
+   * Callback fired when new category is selected
    * @param value
    */
   const filterCallback = (value: string): void => {
@@ -47,8 +49,15 @@ const HomeTab: React.FC = () => {
     setLoading(true)
 
     // Update current category
+    setCurrentPage(0)
     setCategory(value)
   }
+
+  /**
+   * Callback fired when a callback button is pressed
+   * @param value - Page to go next
+   */
+  const pageCallback = (value: number) => setCurrentPage(value)
 
   return (
     <div className="columns is-multiline posts-grid">
@@ -66,6 +75,7 @@ const HomeTab: React.FC = () => {
           {posts.map((post, i) => (
             <Post key={i} data={post} isFav={post.isLiked} />
           ))}
+          <Pagination current={currentPage} callback={pageCallback} />
         </>
       ) : (
         <Notice
