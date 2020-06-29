@@ -61,12 +61,17 @@ const HomeTab: React.FC = () => {
           subheading="There's been an error, please try again"
           text="Error 500"
         />
-      ) : (
+      ) : posts.length !== 0 ? (
         <>
           {posts.map((post, i) => (
             <Post key={i} data={post} isFav={post.isLiked} />
           ))}
         </>
+      ) : (
+        <Notice
+          heading="Oops!"
+          subheading="There are no histories availables"
+        />
       )}
     </div>
   )

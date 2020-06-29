@@ -58,7 +58,7 @@ const http = (category: string, page = 0): Promise<PostObject[]> =>
   new Promise(async (resolve, reject) => {
     try {
       // Generate URL
-      const url = `https://hn.algolia.com/api/v1/search_by_date?query=${category}&page=${page}`
+      const url = `https://hn.algolia.com/api/v1/search_by_date?query=${category}&page=${page}&hitsPerPage=16`
 
       // Send request
       const { data } = await axios.get(url)
