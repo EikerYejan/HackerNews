@@ -26,15 +26,24 @@ const processPosts = (hits: Obj<string>[]): PostObject[] => {
 
   for (let i = 0; i < hits.length; i++) {
     const hit = hits[i]
-    const { created_at, author, story_url, story_title, story_id } = hit
+    const {
+      created_at,
+      author,
+      story_url,
+      story_title,
+      story_id,
+      title,
+      url,
+    } = hit
+    const shouldPass = created_at && author && story_id
 
     // Use only if has all fields
-    if (created_at && author && story_url && story_title && story_id) {
+    if (shouldPass || (!shouldPass && title && url)) {
       const post: PostObject = {
         author,
         date: moment(created_at).fromNow(),
-        link: story_url,
-        title: story_title,
+        link: story_url ?? url,
+        title: story_title ?? title,
         id: story_id,
         isLiked: isFavorite(story_id),
       }
@@ -43,10 +52,11 @@ const processPosts = (hits: Obj<string>[]): PostObject[] => {
     }
   }
 
-  // Filter duplicated posts
+  // Filter posts
   const filtered = _.uniqBy(posts, "title")
+  const sanitized = _.pullAllBy(filtered, [{ link: null }], "link").splice(0, 8)
 
-  return filtered
+  return sanitized
 }
 
 /**
@@ -58,7 +68,7 @@ const http = (category: string, page = 0): Promise<PostObject[]> =>
   new Promise(async (resolve, reject) => {
     try {
       // Generate URL
-      const url = `https://hn.algolia.com/api/v1/search_by_date?query=${category}&page=${page}&hitsPerPage=16`
+      const url = `https://hn.algolia.com/api/v1/search_by_date?query=${category}&page=${page}&hitsPerPage=100`
 
       // Send request
       const { data } = await axios.get(url)
@@ -68,8 +78,7 @@ const http = (category: string, page = 0): Promise<PostObject[]> =>
 
       // Resolve
       resolve(posts)
-    } catch (e) {
-      console.log(e)
+    } catch {
       reject()
     }
   })
