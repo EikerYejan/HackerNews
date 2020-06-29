@@ -71,6 +71,14 @@ const http = (category: string, page = 0): Promise<PostObject[]> =>
  */
 const setStorageItem = (action: StorageSaveAction, value: string): void => {
   const key = action === "save_filter" ? FILTER_REF : FAVES_REF
+
+  if (action === "save_faves") {
+    const currentFaves = getStorageItem("get_faves")
+    console.log(currentFaves)
+
+    return
+  }
+
   window.localStorage.setItem(key, value)
 }
 
@@ -85,4 +93,23 @@ const getStorageItem = (action: StorageGetAction): string | undefined => {
   if (item) return item
 }
 
-export { http, setStorageItem, getStorageItem }
+/**
+ * Update favorites posts
+ * @param isFavorite
+ * @param data
+ */
+const updateFavs = (isFav: boolean, data?: PostObject): void => {
+  const favs = JSON.parse(getStorageItem("get_faves") ?? "[]")
+
+  if (isFav) {
+    console.log(favs)
+  } else {
+    // Update favs
+    favs.push(data)
+  }
+
+  // Save in storage
+  setStorageItem("save_faves", JSON.stringify(favs))
+}
+
+export { http, setStorageItem, getStorageItem, updateFavs }
