@@ -1,0 +1,93 @@
+@import "../../common/common";
+
+.post {
+  @include flexCenter(space-between);
+  transition: 0.25s;
+  align-self: stretch;
+  height: 150px;
+  margin: 10 * $px 0;
+
+  &:hover {
+    opacity: 0.4;
+  }
+
+  &__inner,
+  &__like-button {
+    border: solid $border-width $light-grey;
+    border-radius: $border-radius;
+    height: 100%;
+  }
+
+  &__inner {
+    width: 80%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    display: block;
+    padding: 15 * $px 30 * $px;
+    color: $grey;
+
+    .post__date {
+      @include flexCenter(flex-start);
+      margin-bottom: 10 * $px;
+
+      img {
+        width: 16 * $px;
+        height: 16 * $px;
+        object-fit: contain;
+        margin-right: 10 * $px;
+      }
+
+      span {
+        font-size: 12 * $px;
+        font-weight: lighter;
+      }
+    }
+
+    .post__title {
+      color: $dark-grey;
+      font-weight: 500;
+      font-size: 14 * $px;
+    }
+  }
+
+  &__like-button {
+    @include flexCenter;
+    padding: 0;
+    width: 20%;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background: #f1f1f1;
+
+    svg {
+      overflow: visible;
+
+      path {
+        fill: transparent;
+        stroke: $red;
+        stroke-width: 2px;
+      }
+    }
+  }
+
+  &.is-fav {
+    .post__like-button {
+      svg {
+        path {
+          fill: $red;
+        }
+      }
+    }
+  }
+
+  @include mobile {
+    &__inner {
+      width: 75%;
+    }
+
+    &__like-button {
+      width: 25%;
+    }
+  }
+}

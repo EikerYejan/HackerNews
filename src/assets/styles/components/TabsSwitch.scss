@@ -1,0 +1,49 @@
+@import "../common/common";
+
+.switch {
+  @include flexCenter;
+  margin-top: 50 * $px;
+
+  &__inner {
+    @include flexCenter;
+    width: 200 * $px;
+
+    button {
+      padding: 5 * $px 0;
+      border: 2 * $px solid $light-grey;
+      border-radius: $border-radius;
+      width: 50%;
+      font-weight: bold;
+      color: $grey;
+
+      &:first-child {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: none;
+      }
+
+      &:last-child {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+      }
+
+      &.is-active {
+        border-color: $blue;
+        color: $blue;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.transition-wrapper {
+  opacity: 1;
+  transition: 0.25s linear;
+
+  &.is-changing {
+    opacity: 0;
+  }
+}

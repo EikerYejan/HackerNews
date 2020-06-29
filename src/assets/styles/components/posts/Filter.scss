@@ -1,0 +1,78 @@
+@import "../../common/common";
+
+.filter {
+  margin-top: 20 * $px;
+  margin-bottom: 10 * $px;
+  width: 240 * $px;
+  position: relative;
+
+  &__top,
+  &__option {
+    cursor: pointer;
+  }
+
+  &__top {
+    @include flexCenter(space-between);
+    padding: 5 * $px 12 * $px;
+    border: solid $border-width $dark-grey;
+    border-radius: $border-radius;
+
+    p {
+      text-transform: uppercase;
+    }
+
+    svg {
+      width: 20 * $px;
+      height: 20 * $px;
+      transform: rotate(90deg);
+      transition: 0.25s;
+
+      polyline {
+        stroke: $dark-grey;
+      }
+    }
+  }
+
+  &__options {
+    box-shadow: 0 2px 2px 0 #dad8d8;
+    width: 100%;
+    position: absolute;
+    background: $white;
+    opacity: 0;
+    z-index: -1;
+    transition: 0.25s linear;
+  }
+
+  &__option {
+    @include flexCenter(flex-start);
+    padding: 12 * $px;
+
+    img {
+      width: 25px;
+      height: 25px;
+      object-fit: contain;
+      margin-right: 15px;
+    }
+
+    &.is-current {
+      background: $body-bg;
+    }
+
+    &:hover {
+      opacity: 0.55;
+    }
+  }
+
+  &.is-active {
+    .filter__options {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    .filter__top {
+      svg {
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}

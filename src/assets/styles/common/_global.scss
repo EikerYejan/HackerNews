@@ -1,10 +1,10 @@
 * {
   scroll-behavior: smooth;
+  font-display: swap;
 }
 
 body {
   font-family: $font-main;
-  min-height: 100vh;
   margin: 0;
   color: $grey;
 }
@@ -16,4 +16,50 @@ body {
 button {
   background: none;
   border: none;
+  cursor: pointer;
+}
+
+.app {
+  min-height: 100vh;
+  position: relative;
+
+  .loader {
+    position: absolute;
+    top: calc(50% - #{16 * $px});
+    left: calc(50% - #{16 * $px});
+    width: 32 * $px;
+    height: 32 * $px;
+    border-color: $blue;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+  }
+
+  &__header {
+    @include flexCenter(flex-start);
+    padding: 20 * $px calc(10% + 0.75rem);
+    height: 80 * $px;
+    box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
+    background-image: linear-gradient(to bottom, #ececec -32%, $white 124%);
+
+    h1 {
+      font-family: "Libre Baskerville";
+      font-size: 30 * $px;
+      font-weight: bolder;
+    }
+  }
+
+  &__posts {
+    width: 100%;
+    margin: auto;
+    max-width: 1920 * $px;
+    padding: 0 10% 50 * $px 10%;
+  }
+
+  @include mobile {
+    &__posts,
+    &__header {
+      padding-right: 5%;
+      padding-left: 5%;
+    }
+  }
 }
