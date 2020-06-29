@@ -4,10 +4,18 @@ import moment from "moment"
 import { Obj, PostObject } from "@types"
 
 /** Localstorage utils **/
-type StorageSaveAction = "save_filter" | "save_faves"
-type StorageGetAction = "get_filter" | "get_faves"
+type StorageSaveAction = "save_filter" | "save_faves" | "save_faves_ids"
+type StorageGetAction = "get_filter" | "get_faves" | "get_faves_ids"
 const FILTER_REF = "hacker-news-filter"
 const FAVES_REF = "hacker-news-faves"
+const FAVES_IDS_REF = "hacker-news-faves-id"
+
+/**
+ * Check if user has liked some post
+ * @param id - Story ID
+ */
+const isFavorite = (id: string): boolean =>
+  JSON.parse(getStorageItem("get_faves_ids") ?? "[]").includes(id)
 
 /**
  * Filter api results to remove unnecesary data
@@ -18,15 +26,17 @@ const processPosts = (hits: Obj<string>[]): PostObject[] => {
 
   for (let i = 0; i < hits.length; i++) {
     const hit = hits[i]
-    const { created_at, author, story_url, story_title } = hit
+    const { created_at, author, story_url, story_title, story_id } = hit
 
     // Use only if has all fields
-    if (created_at && author && story_url && story_title) {
+    if (created_at && author && story_url && story_title && story_id) {
       const post: PostObject = {
         author,
         date: moment(created_at).fromNow(),
         link: story_url,
         title: story_title,
+        id: story_id,
+        isLiked: isFavorite(story_id),
       }
 
       posts.push(post)
@@ -70,14 +80,12 @@ const http = (category: string, page = 0): Promise<PostObject[]> =>
  * @param value
  */
 const setStorageItem = (action: StorageSaveAction, value: string): void => {
-  const key = action === "save_filter" ? FILTER_REF : FAVES_REF
-
-  if (action === "save_faves") {
-    const currentFaves = getStorageItem("get_faves")
-    console.log(currentFaves)
-
-    return
-  }
+  const key =
+    action === "save_filter"
+      ? FILTER_REF
+      : action === "save_faves_ids"
+      ? FAVES_IDS_REF
+      : FAVES_REF
 
   window.localStorage.setItem(key, value)
 }
@@ -87,7 +95,13 @@ const setStorageItem = (action: StorageSaveAction, value: string): void => {
  * @param action
  */
 const getStorageItem = (action: StorageGetAction): string | undefined => {
-  const key = action === "get_filter" ? FILTER_REF : FAVES_REF
+  const key =
+    action === "get_filter"
+      ? FILTER_REF
+      : action === "get_faves_ids"
+      ? FAVES_IDS_REF
+      : FAVES_REF
+
   const item = window.localStorage.getItem(key)
 
   if (item) return item
@@ -98,18 +112,24 @@ const getStorageItem = (action: StorageGetAction): string | undefined => {
  * @param isFavorite
  * @param data
  */
-const updateFavs = (isFav: boolean, data?: PostObject): void => {
+const updateFavs = (isFav: boolean, data: PostObject): void => {
   const favs = JSON.parse(getStorageItem("get_faves") ?? "[]")
+  const ids = JSON.parse(getStorageItem("get_faves_ids") ?? "[]")
 
   if (isFav) {
-    console.log(favs)
+    data.isLiked = false
+    _.pullAllBy(favs, [{ id: data?.id }], "id")
+    _.pull(ids, data?.id)
   } else {
     // Update favs
+    data.isLiked = true
     favs.push(data)
+    ids.push(data?.id)
   }
 
   // Save in storage
   setStorageItem("save_faves", JSON.stringify(favs))
+  setStorageItem("save_faves_ids", JSON.stringify(ids))
 }
 
 export { http, setStorageItem, getStorageItem, updateFavs }

@@ -7,9 +7,10 @@ import "../../assets/styles/components/posts/Post.scss"
 type Props = {
   data: PostObject
   isFav?: boolean
+  favsCallback?: (id: string, isFav: boolean) => void
 }
 
-const Post: React.FC<Props> = ({ data, isFav }) => {
+const Post: React.FC<Props> = ({ data, isFav, favsCallback }) => {
   /* State */
   const [isFavorite, setFavorite] = useState(isFav ?? false)
 
@@ -17,8 +18,10 @@ const Post: React.FC<Props> = ({ data, isFav }) => {
     // Save or delete
     updateFavs(isFavorite, data)
 
+    // Return given callback
+    if (favsCallback) favsCallback(data.id, isFav ?? false)
     // Update state
-    setFavorite((prev) => !prev)
+    else setFavorite((prev) => !prev)
   }
 
   return (
