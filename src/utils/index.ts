@@ -54,7 +54,8 @@ const processPosts = (hits: Obj<string>[]): PostObject[] => {
 
   // Filter posts
   const filtered = _.uniqBy(posts, "title")
-  const sanitized = _.pullAllBy(filtered, [{ link: null }], "link").splice(0, 8)
+  const whitLink = _.pullAllBy(filtered, [{ link: null }], "link")
+  const sanitized = _.pullAllBy(whitLink, [{ id: null }], "id").splice(0, 8)
 
   return sanitized
 }
