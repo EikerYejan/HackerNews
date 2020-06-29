@@ -5,16 +5,18 @@ import "../../assets/styles/components/posts/Pagination.scss"
 type Props = {
   current: number
   callback: (value: number) => void
+  limit?: number
 }
 
-const Pagination: React.FC<Props> = ({ current, callback }) => {
+const Pagination: React.FC<Props> = ({ current, callback, limit = 10 }) => {
   /**
    * Print pagination buttons
    */
   const printButtons = (): JSX.Element[] => {
     const buttons: JSX.Element[] = []
+    const pageLimit = limit ? Math.ceil(limit) : 10
 
-    _.times(10, (i) => {
+    _.times(pageLimit, (i) => {
       const indexText = i + 1
       const isActive = i === current
 
@@ -63,9 +65,9 @@ const Pagination: React.FC<Props> = ({ current, callback }) => {
         {printButtons()}
         <button
           onClick={() => callback(current + 1)}
-          title="Previous page"
+          title="Next page"
           className={`pagination__button next ${
-            current === 9 ? "is-disabled" : ""
+            current === Math.ceil(limit - 1 ?? 9) ? "is-disabled" : ""
           }`}
         >
           <svg

@@ -11,80 +11,6 @@ const FAVES_REF = "hacker-news-faves"
 const FAVES_IDS_REF = "hacker-news-faves-id"
 
 /**
- * Check if user has liked some post
- * @param id - Story ID
- */
-const isFavorite = (id: string): boolean =>
-  JSON.parse(getStorageItem("get_faves_ids") ?? "[]").includes(id)
-
-/**
- * Filter api results to remove unnecesary data
- * @param hits
- */
-const processPosts = (hits: Obj<string>[]): PostObject[] => {
-  const posts: PostObject[] = []
-
-  for (let i = 0; i < hits.length; i++) {
-    const hit = hits[i]
-    const {
-      created_at,
-      author,
-      story_url,
-      story_title,
-      story_id,
-      title,
-      url,
-    } = hit
-    const shouldPass = created_at && author && story_id
-
-    // Use only if has all fields
-    if (shouldPass || (!shouldPass && title && url)) {
-      const post: PostObject = {
-        author,
-        date: moment(created_at).fromNow(),
-        link: story_url ?? url,
-        title: story_title ?? title,
-        id: story_id,
-        isLiked: isFavorite(story_id),
-      }
-
-      posts.push(post)
-    }
-  }
-
-  // Filter posts
-  const filtered = _.uniqBy(posts, "title")
-  const whitLink = _.pullAllBy(filtered, [{ link: null }], "link")
-  const sanitized = _.pullAllBy(whitLink, [{ id: null }], "id").splice(0, 8)
-
-  return sanitized
-}
-
-/**
- * Send HTTP request
- * @param category
- * @param page
- */
-const http = (category: string, page = 0): Promise<PostObject[]> =>
-  new Promise(async (resolve, reject) => {
-    try {
-      // Generate URL
-      const url = `https://hn.algolia.com/api/v1/search_by_date?query=${category}&page=${page}&hitsPerPage=100`
-
-      // Send request
-      const { data } = await axios.get(url)
-
-      // Process
-      const posts = processPosts(data.hits)
-
-      // Resolve
-      resolve(posts)
-    } catch {
-      reject()
-    }
-  })
-
-/**
  * Save item in LocalStorage
  * @param action
  * @param value
@@ -117,6 +43,90 @@ const getStorageItem = (action: StorageGetAction): string | undefined => {
   if (item) return item
 }
 
+/* Favorite stories */
+const faves = JSON.parse(getStorageItem("get_faves_ids") ?? "[]")
+
+/**
+ * Check if user has liked some post
+ * @param id - Story ID
+ */
+const isFavorite = (id: string): boolean => _.includes(faves, id)
+
+/**
+ * Filter api results to remove unnecesary data
+ * @param hits
+ */
+const processPosts = (hits: Obj<string>[]): PostObject[] => {
+  const posts: PostObject[] = []
+  let _hits = [...hits]
+
+  // Filter posts
+  _hits = _.filter(
+    _hits,
+    (object) =>
+      object.created_at !== null &&
+      object.author !== null &&
+      object.story_id !== null &&
+      object.story_url !== null &&
+      object.story_title !== null &&
+      object.story_link !== null
+  )
+  _hits = _.uniqBy(hits, "story_title")
+
+  // Get only 8 posts
+  _hits = _hits.splice(0, 8)
+
+  for (let i = 0; i < _hits.length; i++) {
+    const hit = _hits[i]
+    const {
+      created_at,
+      author,
+      story_url,
+      story_title,
+      story_id,
+      title,
+      url,
+    } = hit
+
+    const post: PostObject = {
+      author,
+      date: moment(created_at).fromNow(),
+      link: story_url ?? url,
+      title: story_title ?? title,
+      id: story_id,
+      isLiked: isFavorite(story_id),
+    }
+
+    posts.push(post)
+  }
+
+  return posts
+}
+
+/**
+ * Send HTTP request
+ * @param category
+ * @param page
+ */
+const http = (category: string, page = 0): Promise<PostObject[]> =>
+  new Promise(async (resolve, reject) => {
+    try {
+      // Generate URL
+      const url = `https://hn.algolia.com/api/v1/search_by_date?query=${category}&page=${page}&hitsPerPage=100`
+
+      // Send request
+      const { data } = await axios.get(url)
+
+      // Process
+      const posts = processPosts(data.hits)
+
+      // Resolve
+      resolve(posts)
+    } catch {
+      reject()
+    }
+  })
+
 /**
  * Update favorites posts
  * @param isFavorite
@@ -128,13 +138,13 @@ const updateFavs = (isFav: boolean, data: PostObject): void => {
 
   if (isFav) {
     data.isLiked = false
-    _.pullAllBy(favs, [{ id: data?.id }], "id")
-    _.pull(ids, data?.id)
+    _.pullAllBy(favs, [{ id: data.id }], "id")
+    _.pull(ids, data.id)
   } else {
     // Update favs
     data.isLiked = true
     favs.push(data)
-    ids.push(data?.id)
+    ids.push(data.id)
   }
 
   // Save in storage
@@ -142,4 +152,24 @@ const updateFavs = (isFav: boolean, data: PostObject): void => {
   setStorageItem("save_faves_ids", JSON.stringify(ids))
 }
 
-export { http, setStorageItem, getStorageItem, updateFavs }
+/**
+ * Get favorite posts in a paginated way
+ * @param page
+ */
+const getPagedFaves = (page = 0): [PostObject[], number] => {
+  const spliceStart = page === 0 ? 0 : page * 8
+
+  console.log(`Page: ${page}
+  start: ${spliceStart}
+  `)
+
+  const posts: PostObject[] = JSON.parse(getStorageItem("get_faves") ?? "[]")
+  const length = posts.length
+
+  // Splice posts
+  const spliced = posts.splice(spliceStart, 8)
+
+  return [spliced, length]
+}
+
+export { http, setStorageItem, getStorageItem, updateFavs, getPagedFaves }
