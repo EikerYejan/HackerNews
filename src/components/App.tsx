@@ -1,4 +1,5 @@
 import React from "react"
+// import FavesTab from "./tabs/FavesTab"
 import HomeTab from "./tabs/HomeTab"
 import "../assets/styles/App.scss"
 
