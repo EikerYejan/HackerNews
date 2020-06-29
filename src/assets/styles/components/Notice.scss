@@ -2,7 +2,7 @@
 
 .notice {
   @include flexCenter;
-  min-height: 75vh;
+  min-height: 50vh;
 
   &__inner {
     text-align: center;
@@ -13,7 +13,7 @@
     }
 
     h2 {
-      font-size: 60 * $px;
+      font-size: 80 * $px;
       font-weight: bold;
       color: $blue;
     }
