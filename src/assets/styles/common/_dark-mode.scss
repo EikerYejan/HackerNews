@@ -1,0 +1,28 @@
+.theme-dark {
+  .app {
+    &__header {
+      background: #2e2e2e;
+
+      h1 {
+        color: $text-color;
+      }
+    }
+  }
+
+  .image-dark-mode-filter {
+    filter: brightness(20);
+  }
+
+  // Filters
+  .filter {
+    &__options {
+      background: #2e2e2e;
+
+      .filter__option {
+        &.is-current {
+          background: $body-bg;
+        }
+      }
+    }
+  }
+}

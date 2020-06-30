@@ -1,0 +1,58 @@
+@import "../common/common";
+
+#theme-switch {
+  width: 65 * $px;
+  height: 35 * $px;
+  position: absolute;
+  right: 10%;
+  border: $border-width solid $text-color;
+  border-radius: $border-radius;
+  padding: 0;
+
+  span {
+    position: absolute;
+    left: -1 * $px;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: $text-color;
+    display: block;
+    z-index: 1;
+    transition: 0.15s linear;
+    border-radius: $border-radius;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  img {
+    position: absolute;
+    width: 20 * $px;
+    height: 20 * $px;
+    top: calc(50% - #{10 * $px});
+
+    &.light-icon {
+      right: 5 * $px;
+    }
+
+    &.dark-icon {
+      left: 5 * $px;
+      filter: invert(1);
+    }
+  }
+
+  &.theme-dark {
+    border-color: $white;
+
+    span {
+      left: 51%;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
