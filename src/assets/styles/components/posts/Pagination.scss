@@ -1,0 +1,75 @@
+@import "../../common/common";
+
+.pagination {
+  margin: 0 !important;
+
+  &__inner {
+    @include flexCenter;
+
+    .pagination__button {
+      @include flexCenter;
+      border: $border-width solid $light-grey;
+      border-radius: $border-radius;
+      width: 30 * $px;
+      height: 30 * $px;
+      padding: 0;
+      margin: 0 8 * $px;
+      font-size: 14 * $px;
+      color: $dark-grey;
+
+      svg {
+        width: 20 * $px;
+        height: 20 * $px;
+
+        polyline {
+          fill: $light-grey;
+          stroke: $light-grey;
+        }
+      }
+
+      &.prev {
+        svg {
+          transform: rotate(-180deg);
+        }
+      }
+
+      &.is-active {
+        background: $blue;
+        color: $white;
+        border-color: $blue;
+      }
+
+      &.is-disabled {
+        opacity: 0.45;
+        pointer-events: none;
+      }
+    }
+  }
+
+  @include mobile {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-bottom: 45 * $px !important;
+
+    &__inner {
+      .pagination__button {
+        margin: 0 3 * $px;
+        font-size: 11 * $px;
+
+        &.prev,
+        &.next {
+          position: absolute;
+          bottom: 45px;
+        }
+
+        &.prev {
+          left: calc(50% - #{40 * $px});
+        }
+
+        &.next {
+          right: calc(50% - #{40 * $px});
+        }
+      }
+    }
+  }
+}
