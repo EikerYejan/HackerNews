@@ -1,3 +1,5 @@
+import { Dispatch as DispatchAction, SetStateAction } from "react"
+
 export interface PostObject {
   title: string
   date: string
@@ -8,3 +10,5 @@ export interface PostObject {
 }
 
 export type Obj<T = unknown> = Record<string, T>
+
+export type Dispatch<T> = DispatchAction<SetStateAction<T>>
