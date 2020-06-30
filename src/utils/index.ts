@@ -4,11 +4,20 @@ import moment from "moment"
 import { Obj, PostObject } from "@types"
 
 /** Localstorage utils **/
-type StorageSaveAction = "save_filter" | "save_faves" | "save_faves_ids"
-type StorageGetAction = "get_filter" | "get_faves" | "get_faves_ids"
+type StorageSaveAction =
+  | "save_filter"
+  | "save_faves"
+  | "save_faves_ids"
+  | "save_theme"
+type StorageGetAction =
+  | "get_filter"
+  | "get_faves"
+  | "get_faves_ids"
+  | "get_theme"
 const FILTER_REF = "hacker-news-filter"
 const FAVES_REF = "hacker-news-faves"
 const FAVES_IDS_REF = "hacker-news-faves-id"
+const THEME_REF = "hacker-news-theme"
 
 /**
  * Save item in LocalStorage
@@ -21,6 +30,8 @@ const setStorageItem = (action: StorageSaveAction, value: string): void => {
       ? FILTER_REF
       : action === "save_faves_ids"
       ? FAVES_IDS_REF
+      : action === "save_theme"
+      ? THEME_REF
       : FAVES_REF
 
   window.localStorage.setItem(key, value)
@@ -36,6 +47,8 @@ const getStorageItem = (action: StorageGetAction): string | undefined => {
       ? FILTER_REF
       : action === "get_faves_ids"
       ? FAVES_IDS_REF
+      : action === "get_theme"
+      ? THEME_REF
       : FAVES_REF
 
   const item = window.localStorage.getItem(key)
@@ -155,7 +168,7 @@ const updateFavs = (isFav: boolean, data: PostObject): void => {
  * @param page
  */
 const getPagedFaves = (page = 0): [PostObject[], number] => {
-  const spliceStart = page === 0 ? 0 : page * 8
+  const spliceStart = page * 8
 
   const posts: PostObject[] = JSON.parse(getStorageItem("get_faves") ?? "[]")
   const length = posts.length

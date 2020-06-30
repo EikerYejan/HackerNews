@@ -1,3 +1,20 @@
+// Theme variables
+:root {
+  --body-bg: #fff;
+  --text-color: #606060;
+  --light-grey: #979797;
+  --dark-grey: #2e2e2e;
+  --lighter-grey: #f1f1f1;
+
+  .theme-dark {
+    --body-bg: #1c1c1e;
+    --text-color: #fff;
+    --light-grey: #f1f1f1;
+    --dark-grey: #fff;
+    --ligther-grey: #606060;
+  }
+}
+
 // Units
 $px: 0.0625rem;
 
@@ -6,10 +23,12 @@ $font-main: "Roboto";
 
 // Colors
 $white: #fff;
-$body-bg: #f1f1f1;
+$body-bg: var(--body-bg);
+$text-color: var(--text-color);
 $grey: #606060;
-$light-grey: #979797;
-$dark-grey: #2e2e2e;
+$light-grey: var(--light-grey);
+$lighter-grey: #f1f1f1;
+$dark-grey: var(--dark-grey);
 $blue: #1797ff;
 $red: #dd0031;
 
