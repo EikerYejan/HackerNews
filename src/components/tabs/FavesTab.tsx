@@ -20,8 +20,6 @@ const FavesTab: React.FC = () => {
     // Get from LocalStorage
     const [faves, limit] = getPagedFaves(currentPage)
 
-    console.log(limit)
-
     // Update state
     setPosts(faves)
     pageLimit.current = limit

@@ -57,7 +57,13 @@ const HomeTab: React.FC = () => {
    * Callback fired when a callback button is pressed
    * @param value - Page to go next
    */
-  const pageCallback = (value: number) => setCurrentPage(value)
+  const pageCallback = (value: number) => {
+    // Upadate page
+    setCurrentPage(value)
+
+    // Show loader
+    setLoading(true)
+  }
 
   return (
     <div className="columns is-multiline posts-grid">

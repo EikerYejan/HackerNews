@@ -43,14 +43,17 @@ const getStorageItem = (action: StorageGetAction): string | undefined => {
   if (item) return item
 }
 
-/* Favorite stories */
-const faves = JSON.parse(getStorageItem("get_faves_ids") ?? "[]")
-
 /**
  * Check if user has liked some post
  * @param id - Story ID
  */
-const isFavorite = (id: string): boolean => _.includes(faves, id)
+const isFavorite = (id: string): boolean => {
+  /* Favorite stories */
+  const faves = JSON.parse(getStorageItem("get_faves_ids") ?? "[]")
+  const isLiked = _.includes(faves, id)
+
+  return isLiked
+}
 
 /**
  * Filter api results to remove unnecesary data
@@ -66,35 +69,30 @@ const processPosts = (hits: Obj<string>[]): PostObject[] => {
     (object) =>
       object.created_at !== null &&
       object.author !== null &&
-      object.story_id !== null &&
       object.story_url !== null &&
       object.story_title !== null &&
-      object.story_link !== null
+      object.story_link !== null &&
+      object.story_id !== null
   )
   _hits = _.uniqBy(hits, "story_title")
+  const withID = _.pullAllBy(_hits, [{ story_id: null }], "story_id")
+  const withUrl = _.pullAllBy(withID, [{ story_url: null }], "story_url")
 
   // Get only 8 posts
-  _hits = _hits.splice(0, 8)
+  const finalPosts = withUrl.splice(0, 8)
 
-  for (let i = 0; i < _hits.length; i++) {
-    const hit = _hits[i]
-    const {
-      created_at,
-      author,
-      story_url,
-      story_title,
-      story_id,
-      title,
-      url,
-    } = hit
+  for (let i = 0; i < finalPosts.length; i++) {
+    const hit = finalPosts[i]
+    const { created_at, author, story_url, story_title, story_id } = hit
 
+    const isLiked = isFavorite(story_id)
     const post: PostObject = {
       author,
+      isLiked,
       date: moment(created_at).fromNow(),
-      link: story_url ?? url,
-      title: story_title ?? title,
+      link: story_url,
+      title: story_title,
       id: story_id,
-      isLiked: isFavorite(story_id),
     }
 
     posts.push(post)
@@ -133,17 +131,17 @@ const http = (category: string, page = 0): Promise<PostObject[]> =>
  * @param data
  */
 const updateFavs = (isFav: boolean, data: PostObject): void => {
-  const favs = JSON.parse(getStorageItem("get_faves") ?? "[]")
-  const ids = JSON.parse(getStorageItem("get_faves_ids") ?? "[]")
+  let favs: PostObject[] = JSON.parse(getStorageItem("get_faves") ?? "[]")
+  let ids: string[] = JSON.parse(getStorageItem("get_faves_ids") ?? "[]")
 
   if (isFav) {
     data.isLiked = false
-    _.pullAllBy(favs, [{ id: data.id }], "id")
-    _.pull(ids, data.id)
+    favs = _.pullAllBy(favs, [{ id: data.id }], "id")
+    ids = _.pull(ids, data.id)
   } else {
     // Update favs
     data.isLiked = true
-    favs.push(data)
+    favs.unshift(data)
     ids.push(data.id)
   }
 
@@ -158,10 +156,6 @@ const updateFavs = (isFav: boolean, data: PostObject): void => {
  */
 const getPagedFaves = (page = 0): [PostObject[], number] => {
   const spliceStart = page === 0 ? 0 : page * 8
-
-  console.log(`Page: ${page}
-  start: ${spliceStart}
-  `)
 
   const posts: PostObject[] = JSON.parse(getStorageItem("get_faves") ?? "[]")
   const length = posts.length
