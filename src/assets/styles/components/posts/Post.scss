@@ -4,7 +4,7 @@
   @include flexCenter(space-between);
   transition: 0.25s;
   align-self: stretch;
-  height: 150px;
+  height: 130 * $px;
   margin: 10 * $px 0;
 
   &:hover {
@@ -58,7 +58,8 @@
     border-left: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    background: #f1f1f1;
+    background: $body-bg;
+    transition: inherit;
 
     svg {
       overflow: visible;
@@ -67,6 +68,16 @@
         fill: transparent;
         stroke: $red;
         stroke-width: 2px;
+      }
+    }
+
+    &:hover {
+      background: $red;
+
+      svg {
+        path {
+          stroke: $white;
+        }
       }
     }
   }
@@ -78,10 +89,20 @@
           fill: $red;
         }
       }
+
+      &:hover {
+        svg {
+          path {
+            fill: $white;
+          }
+        }
+      }
     }
   }
 
   @include mobile {
+    height: 150 * $px;
+
     &__inner {
       width: 75%;
     }
