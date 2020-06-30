@@ -1,3 +1,21 @@
+[![PWA Shields](https://www.pwa-shields.com/1.0.0/series/react/solid/blue/purple.svg)](https://hacker-news-eikeryejan.netlify.app)
+### [Live Version](https://hacker-news-eikeryejan.netlify.app)
+
+## Used in this project:
+
+ - Typescript
+- React
+- Create React App
+- Bulma
+- Axios
+- Lodash
+- Moment
+- React Helmet
+- Prettier
+- Husky
+- Lint-staged
+- ESLint
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
