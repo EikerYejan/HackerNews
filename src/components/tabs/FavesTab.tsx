@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import _ from "lodash"
 import Post from "../posts/Post"
 import Pagination from "../posts/Pagination"
+import useTab from "./useTab"
 import Notice from "../Notice"
 import { getPagedFaves } from "../../utils"
-import { PostObject } from "@types"
 
 const FavesTab: React.FC = () => {
   /* State */
-  const [posts, setPosts] = useState<PostObject[]>([])
-  const [isLoading, setLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(0)
+  const {
+    posts,
+    setPosts,
+    isLoading,
+    setLoading,
+    currentPage,
+    setCurrentPage,
+  } = useTab()
 
   /* Posts amountref */
   const pageLimit = useRef(0)
@@ -24,7 +29,7 @@ const FavesTab: React.FC = () => {
     setPosts(faves)
     pageLimit.current = limit
     setTimeout(() => setLoading(false), 500)
-  }, [currentPage])
+  }, [currentPage]) //eslint-disable-line
 
   /**
    * Delete post from state
