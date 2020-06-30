@@ -33,7 +33,7 @@ const Post: React.FC<Props> = ({ data, isFav, favsCallback }) => {
         rel="noopener noreferrer"
       >
         <p className="post__date">
-          <img src={time} alt="post-date" />
+          <img className="image-dark-mode-filter" src={time} alt="post-date" />
           <span>
             {data.date} by {data.author}
           </span>
