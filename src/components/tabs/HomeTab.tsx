@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
-import { PostObject } from "@types"
 import Post from "../posts/Post"
 import Filter from "../posts/Filter"
 import Pagination from "../posts/Pagination"
 import Notice from "../Notice"
+import useTab from "./useTab"
 import { http, getStorageItem } from "../../utils"
 
 const HomeTab: React.FC = () => {
@@ -13,11 +13,17 @@ const HomeTab: React.FC = () => {
   /**
    * State
    */
-  const [posts, setPosts] = useState<PostObject[]>([])
-  const [isLoading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
   const [category, setCategory] = useState<string>(filter ?? "reactjs")
-  const [currentPage, setCurrentPage] = useState(0)
+  const {
+    posts,
+    isLoading,
+    error,
+    currentPage,
+    setPosts,
+    setLoading,
+    setError,
+    setCurrentPage,
+  } = useTab()
 
   /**
    * Get API data
@@ -38,7 +44,7 @@ const HomeTab: React.FC = () => {
     }
 
     getPosts()
-  }, [category, currentPage])
+  }, [category, currentPage]) //eslint-disable-line
 
   /**
    * Callback fired when new category is selected
