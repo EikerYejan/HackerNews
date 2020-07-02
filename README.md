@@ -16,7 +16,7 @@
 - Lint-staged
 - ESLint
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The design was provided by the good folks at [Reign](https://reign.cl) 
 
 ## Available Scripts
 
