@@ -1,5 +1,4 @@
 import React from "react"
-import _ from "lodash"
 import "../../assets/styles/components/posts/Pagination.scss"
 
 type Props = {
@@ -9,31 +8,7 @@ type Props = {
 }
 
 const Pagination: React.FC<Props> = ({ current, callback, limit = 10 }) => {
-  /**
-   * Print pagination buttons
-   */
-  const printButtons = (): JSX.Element[] => {
-    const buttons: JSX.Element[] = []
-    const pageLimit = limit ? Math.ceil(limit) : 10
-
-    _.times(pageLimit, (i) => {
-      const indexText = i + 1
-      const isActive = i === current
-
-      buttons.push(
-        <button
-          key={i}
-          onClick={() => callback(i)}
-          title={`Go to page ${indexText}`}
-          className={`pagination__button ${isActive ? "is-active" : ""}`}
-        >
-          {indexText}
-        </button>
-      )
-    })
-
-    return buttons
-  }
+  const pageLimit = limit ? Math.ceil(limit) : 10
 
   return (
     <div className="column is-12 pagination">
@@ -62,7 +37,20 @@ const Pagination: React.FC<Props> = ({ current, callback, limit = 10 }) => {
             />
           </svg>
         </button>
-        {printButtons()}
+        {Array(pageLimit)
+          .fill(0)
+          .map((_, i) => (
+            <button
+              key={i}
+              onClick={() => callback(i)}
+              title={`Go to page ${i + 1}`}
+              className={`pagination__button ${
+                i === current ? "is-active" : ""
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
         <button
           onClick={() => callback(current + 1)}
           title="Next page"

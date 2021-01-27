@@ -7,13 +7,9 @@ import useTab from "./useTab"
 import { http, getStorageItem } from "../../utils"
 
 const HomeTab: React.FC = () => {
-  /* Get current filter */
   const filter = getStorageItem("get_filter")
 
-  /**
-   * State
-   */
-  const [category, setCategory] = useState<string>(filter ?? "reactjs")
+  const [category, setCategory] = useState(filter ?? "reactjs")
   const {
     posts,
     isLoading,
@@ -25,16 +21,11 @@ const HomeTab: React.FC = () => {
     setCurrentPage,
   } = useTab()
 
-  /**
-   * Get API data
-   */
   useEffect(() => {
     const getPosts = async () => {
       try {
-        // Request
         const posts = await http(category, currentPage)
 
-        // Update state
         setPosts(posts)
       } catch {
         setError(true)
@@ -44,30 +35,16 @@ const HomeTab: React.FC = () => {
     }
 
     getPosts()
-  }, [category, currentPage]) //eslint-disable-line
+  }, [category, currentPage, setError, setLoading, setPosts])
 
-  /**
-   * Callback fired when new category is selected
-   * @param value
-   */
   const filterCallback = (value: string): void => {
-    // Add loader
     setLoading(true)
-
-    // Update current category
     setCurrentPage(0)
     setCategory(value)
   }
 
-  /**
-   * Callback fired when a callback button is pressed
-   * @param value - Page to go next
-   */
   const pageCallback = (value: number) => {
-    // Upadate page
     setCurrentPage(value)
-
-    // Show loader
     setLoading(true)
   }
 

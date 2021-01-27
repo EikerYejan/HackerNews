@@ -1,19 +1,14 @@
-import React, { useState, useRef } from "react"
-import HomeTab from "./HomeTab"
-import FavesTab from "./FavesTab"
+import React, { useState, useRef, lazy, Suspense } from "react"
 import "../../assets/styles/components/TabsSwitch.scss"
 
+const HomeTab = lazy(() => import("./HomeTab"))
+const FavesTab = lazy(() => import("./FavesTab"))
+
 const TabsSwitch: React.FC = () => {
-  /* State */
   const [activeTab, setActiveTab] = useState("all")
 
-  /* Transition wrapper ref */
   const wrapper = useRef<HTMLDivElement>(null)
 
-  /**
-   * Handle switch click
-   * @param e
-   */
   const handleSwitch = (e: React.SyntheticEvent<HTMLButtonElement>): void => {
     const button = e.currentTarget
     const { tab } = button.dataset
@@ -59,7 +54,9 @@ const TabsSwitch: React.FC = () => {
         </div>
       </div>
       <div ref={wrapper} className="transition-wrapper">
-        {activeTab === "all" ? <HomeTab /> : <FavesTab />}
+        <Suspense fallback={<span className="loader" />}>
+          {activeTab === "all" ? <HomeTab /> : <FavesTab />}
+        </Suspense>
       </div>
     </>
   )

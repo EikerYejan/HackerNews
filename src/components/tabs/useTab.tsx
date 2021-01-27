@@ -13,7 +13,6 @@ type UseTab = () => {
 }
 
 const useTab: UseTab = () => {
-  /* State */
   const [posts, setPosts] = useState<PostObject[]>([])
   const [isLoading, setLoading] = useState(true)
   const [error, setError] = useState(false)

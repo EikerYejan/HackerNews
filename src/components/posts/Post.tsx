@@ -11,16 +11,12 @@ type Props = {
 }
 
 const Post: React.FC<Props> = ({ data, isFav, favsCallback }) => {
-  /* State */
   const [isFavorite, setFavorite] = useState(isFav)
 
   const handleFavorite = (): void => {
-    // Save or delete
     updateFavs(isFavorite, data)
 
-    // Return given callback
     if (favsCallback) favsCallback(data.id, isFav)
-    // Update state
     else setFavorite((prev) => !prev)
   }
 

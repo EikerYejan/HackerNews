@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react"
-import _ from "lodash"
 import Post from "../posts/Post"
 import Pagination from "../posts/Pagination"
 import useTab from "./useTab"
@@ -7,7 +6,6 @@ import Notice from "../Notice"
 import { getPagedFaves } from "../../utils"
 
 const FavesTab: React.FC = () => {
-  /* State */
   const {
     posts,
     setPosts,
@@ -17,12 +15,9 @@ const FavesTab: React.FC = () => {
     setCurrentPage,
   } = useTab()
 
-  /* Posts amountref */
   const pageLimit = useRef(0)
 
-  /* Get posts */
   useEffect(() => {
-    // Get from LocalStorage
     const [faves, limit] = getPagedFaves(currentPage)
 
     // Update state
@@ -31,18 +26,10 @@ const FavesTab: React.FC = () => {
     setTimeout(() => setLoading(false), 500)
   }, [currentPage]) //eslint-disable-line
 
-  /**
-   * Delete post from state
-   * @param id
-   */
   const favsCallback = (id: string): void => {
-    setPosts((prev) => _.pullAllBy([...prev], [{ id }], "id"))
+    setPosts((prev) => prev.filter((post) => post.id !== id))
   }
 
-  /**
-   * Update page callback
-   * @param value
-   */
   const pageCallback = (value: number): void => setCurrentPage(value)
 
   return (

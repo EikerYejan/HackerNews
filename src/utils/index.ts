@@ -1,5 +1,4 @@
 import axios from "axios"
-import _ from "lodash"
 import moment from "moment"
 import { PostObject, AlgoliaHit } from "@types"
 
@@ -105,8 +104,8 @@ const updateFavs = (isFav: boolean, data: PostObject): void => {
 
   if (isFav) {
     data.isLiked = false
-    favs = _.pullAllBy(favs, [{ id: data.id }], "id")
-    ids = _.pull(ids, data.id)
+    favs = favs.filter((post) => post.id !== data.id)
+    ids = ids.filter((id) => id !== data.id)
   } else {
     // Update favs
     data.isLiked = true

@@ -29,27 +29,18 @@ const categories = [
 ]
 
 const Filter: React.FC<Props> = ({ category, callback }) => {
-  /* State */
   const [isActive, setActive] = useState(false)
   const [current, setCurrent] = useState(category ?? "reactjs")
 
-  /**
-   * Click on an option
-   * @param e
-   */
   const optionClick = (e: React.SyntheticEvent<HTMLParagraphElement>): void => {
     const { category } = e.currentTarget.dataset
 
     if (category) {
-      // Update state
       setCurrent(category)
       setActive(false)
 
       if (category !== current) {
-        // Save in LocalStorage
         setStorageItem("save_filter", category)
-
-        // Return callback
         callback(category)
       }
     }
